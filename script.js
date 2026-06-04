@@ -1,7 +1,7 @@
 const header = document.querySelector("[data-header]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
-const parallaxItems = document.querySelectorAll("[data-parallax]");
+const parallaxItems = [...document.querySelectorAll("[data-parallax]")];
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const setHeaderState = () => {
@@ -34,16 +34,27 @@ nav?.querySelectorAll("a").forEach((link) => {
   });
 });
 
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
 const updateParallax = () => {
-  if (reducedMotion) return;
+  if (reducedMotion || !parallaxItems.length) return;
+
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportCenter = viewportHeight / 2;
 
   parallaxItems.forEach((item) => {
-    const speed = Number(item.dataset.parallax || 0.12);
+    const speed = Number.parseFloat(item.dataset.parallax || "0.16");
     const container = item.closest("section") || item.parentElement || item;
     const rect = container.getBoundingClientRect();
-    const rawOffset = (rect.top - window.innerHeight * 0.5) * speed;
-    const offset = Math.max(-180, Math.min(180, rawOffset));
-    item.style.setProperty("--parallax-offset", `${offset}px`);
+
+    if (rect.bottom < -viewportHeight * 0.25 || rect.top > viewportHeight * 1.25) return;
+
+    const sectionCenter = rect.top + rect.height / 2;
+    const distanceFromViewportCenter = viewportCenter - sectionCenter;
+    const maxOffset = Math.max(72, Math.min(230, rect.height * 0.22));
+    const offset = clamp(distanceFromViewportCenter * speed, -maxOffset, maxOffset);
+
+    item.style.setProperty("--parallax-offset", `${offset.toFixed(2)}px`);
   });
 };
 
@@ -61,53 +72,6 @@ updateParallax();
 window.addEventListener("load", requestParallax);
 window.addEventListener("scroll", requestParallax, { passive: true });
 window.addEventListener("resize", requestParallax);
-
-const setupPartnerTabs = () => {
-  const tabs = [...document.querySelectorAll("[data-partner-tab]")];
-  const panels = [...document.querySelectorAll("[data-partner-panel]")];
-  if (!tabs.length || !panels.length) return;
-
-  let activeIndex = 0;
-  let timer;
-
-  const activate = (index, shouldResetTimer = true) => {
-    activeIndex = (index + tabs.length) % tabs.length;
-    const key = tabs[activeIndex].dataset.partnerTab;
-
-    tabs.forEach((tab) => {
-      const isActive = tab.dataset.partnerTab === key;
-      tab.classList.toggle("is-active", isActive);
-      tab.setAttribute("aria-selected", String(isActive));
-    });
-
-    panels.forEach((panel) => {
-      const isActive = panel.dataset.partnerPanel === key;
-      panel.classList.toggle("is-active", isActive);
-      panel.toggleAttribute("aria-hidden", !isActive);
-    });
-
-    if (shouldResetTimer) resetTimer();
-  };
-
-  const resetTimer = () => {
-    window.clearInterval(timer);
-    timer = window.setInterval(() => activate(activeIndex + 1, false), 6200);
-  };
-
-  tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => activate(index));
-    tab.addEventListener("keydown", (event) => {
-      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-      event.preventDefault();
-      const direction = event.key === "ArrowRight" ? 1 : -1;
-      const nextIndex = (index + direction + tabs.length) % tabs.length;
-      tabs[nextIndex].focus();
-      activate(nextIndex);
-    });
-  });
-
-  resetTimer();
-};
 
 const setupLightbox = () => {
   const items = [...document.querySelectorAll(".gallery-item:not(.swiper-slide-duplicate)")];
@@ -208,8 +172,6 @@ window.addEventListener("load", () => {
       disable: reducedMotion
     });
   }
-
-  setupPartnerTabs();
 
   if (window.Swiper) {
     new window.Swiper(".gallery-swiper", {
