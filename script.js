@@ -74,7 +74,9 @@ window.addEventListener("scroll", requestParallax, { passive: true });
 window.addEventListener("resize", requestParallax);
 
 const setupLightbox = () => {
-  const items = [...document.querySelectorAll(".gallery-item:not(.swiper-slide-duplicate)")];
+  const sourceItems = [
+    ...document.querySelectorAll(".gallery-item:not(.swiper-slide-duplicate), [data-lightbox-src]")
+  ];
   const lightbox = document.querySelector("[data-lightbox]");
   const image = document.querySelector("[data-lightbox-image]");
   const title = document.querySelector("[data-lightbox-title]");
@@ -83,29 +85,57 @@ const setupLightbox = () => {
   const prevButton = document.querySelector("[data-lightbox-prev]");
   const nextButton = document.querySelector("[data-lightbox-next]");
   const stage = document.querySelector("[data-lightbox-stage]");
-  if (!items.length || !lightbox || !image || !title || !counter) return;
+  if (!sourceItems.length || !lightbox || !image || !title || !counter) return;
 
-  const gallery = items.map((item) => ({
-    src: item.dataset.gallerySrc,
-    title: item.dataset.galleryTitle,
-    alt: item.querySelector("img")?.alt || item.dataset.galleryTitle
-  }));
+  const getItemGroup = (item) => item.dataset.lightboxGroup || "ambientes";
+  const getItemSrc = (item) => item.dataset.lightboxSrc || item.dataset.gallerySrc;
+  const getItemTitle = (item) => item.dataset.lightboxCaption || item.dataset.galleryTitle;
+  const galleries = new Map();
+
+  sourceItems.forEach((item) => {
+    const src = getItemSrc(item);
+    const itemTitle = getItemTitle(item);
+    if (!src || !itemTitle) return;
+
+    const group = getItemGroup(item);
+    const gallery = galleries.get(group) || [];
+    gallery.push({
+      src,
+      title: itemTitle,
+      alt: item.querySelector("img")?.alt || itemTitle
+    });
+    galleries.set(group, gallery);
+  });
 
   let currentIndex = 0;
+  let currentGallery = [];
   let lastFocusedElement = null;
   let touchStartX = 0;
   let touchStartY = 0;
 
   const render = () => {
-    const item = gallery[currentIndex];
+    const item = currentGallery[currentIndex];
+    if (!item) return;
+
     image.src = item.src;
     image.alt = item.alt;
     title.textContent = item.title;
-    counter.textContent = `${currentIndex + 1} / ${gallery.length}`;
+    counter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
   };
 
-  const open = (index) => {
-    currentIndex = index;
+  const getTriggerIndex = (item, gallery) => {
+    if (item.dataset.galleryIndex) return Number(item.dataset.galleryIndex);
+
+    const src = getItemSrc(item);
+    const itemTitle = getItemTitle(item);
+    return Math.max(0, gallery.findIndex((entry) => entry.src === src && entry.title === itemTitle));
+  };
+
+  const open = (group, index) => {
+    currentGallery = galleries.get(group) || [];
+    if (!currentGallery.length) return;
+
+    currentIndex = clamp(index, 0, currentGallery.length - 1);
     lastFocusedElement = document.activeElement;
     render();
     lightbox.hidden = false;
@@ -121,13 +151,17 @@ const setupLightbox = () => {
   };
 
   const move = (direction) => {
-    currentIndex = (currentIndex + direction + gallery.length) % gallery.length;
+    if (!currentGallery.length) return;
+
+    currentIndex = (currentIndex + direction + currentGallery.length) % currentGallery.length;
     render();
   };
 
-  document.querySelectorAll(".gallery-item").forEach((item) => {
+  document.querySelectorAll(".gallery-item, [data-lightbox-src]").forEach((item) => {
     item.addEventListener("click", () => {
-      open(Number(item.dataset.galleryIndex || 0));
+      const group = getItemGroup(item);
+      const gallery = galleries.get(group) || [];
+      open(group, getTriggerIndex(item, gallery));
     });
   });
 
@@ -159,6 +193,164 @@ const setupLightbox = () => {
     if (event.key === "ArrowRight") move(1);
   });
 };
+
+const cookieConsentKey = "amorFraternoCookieConsent";
+const defaultCookieConsent = {
+  necessary: true,
+  analytics: false,
+  marketing: false
+};
+
+const getStoredCookieConsent = () => {
+  try {
+    const stored = JSON.parse(localStorage.getItem(cookieConsentKey));
+    if (!stored || typeof stored !== "object") return null;
+
+    return {
+      ...defaultCookieConsent,
+      analytics: Boolean(stored.analytics),
+      marketing: Boolean(stored.marketing)
+    };
+  } catch (error) {
+    return null;
+  }
+};
+
+const updateGoogleConsent = (consent) => {
+  if (typeof window.gtag !== "function") return;
+
+  window.gtag("consent", "update", {
+    ad_storage: consent.marketing ? "granted" : "denied",
+    analytics_storage: consent.analytics ? "granted" : "denied",
+    ad_user_data: consent.marketing ? "granted" : "denied",
+    ad_personalization: consent.marketing ? "granted" : "denied"
+  });
+};
+
+const saveCookieConsent = (consent) => {
+  const normalizedConsent = {
+    ...defaultCookieConsent,
+    analytics: Boolean(consent.analytics),
+    marketing: Boolean(consent.marketing),
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    localStorage.setItem(cookieConsentKey, JSON.stringify(normalizedConsent));
+  } catch (error) {
+    // Consent still applies for the current page view when storage is unavailable.
+  }
+
+  updateGoogleConsent(normalizedConsent);
+  return normalizedConsent;
+};
+
+const setupCookieConsent = () => {
+  const banner = document.querySelector("[data-cookie-banner]");
+  const modal = document.querySelector("[data-cookie-modal]");
+  const closeButton = document.querySelector("[data-cookie-close]");
+  const analyticsToggle = document.querySelector('[data-cookie-toggle="analytics"]');
+  const marketingToggle = document.querySelector('[data-cookie-toggle="marketing"]');
+  if (!banner || !modal) return;
+
+  let lastFocusedElement = null;
+
+  const setToggleState = (consent) => {
+    if (analyticsToggle) analyticsToggle.checked = Boolean(consent.analytics);
+    if (marketingToggle) marketingToggle.checked = Boolean(consent.marketing);
+  };
+
+  const hideBanner = () => {
+    banner.hidden = true;
+    document.body.classList.remove("cookie-banner-visible");
+  };
+
+  const showBanner = () => {
+    banner.hidden = false;
+    document.body.classList.add("cookie-banner-visible");
+    window.lucide?.createIcons();
+  };
+
+  const closePreferences = () => {
+    modal.hidden = true;
+    document.body.classList.remove("cookie-modal-open");
+    lastFocusedElement?.focus?.();
+  };
+
+  const openPreferences = () => {
+    lastFocusedElement = document.activeElement;
+    setToggleState(getStoredCookieConsent() || defaultCookieConsent);
+    modal.hidden = false;
+    document.body.classList.add("cookie-modal-open");
+    window.lucide?.createIcons();
+    closeButton?.focus();
+  };
+
+  const persistChoice = (consent) => {
+    saveCookieConsent(consent);
+    hideBanner();
+    closePreferences();
+  };
+
+  const acceptAll = () => {
+    persistChoice({
+      analytics: true,
+      marketing: true
+    });
+  };
+
+  const rejectOptional = () => {
+    persistChoice({
+      analytics: false,
+      marketing: false
+    });
+  };
+
+  const savePreferences = () => {
+    persistChoice({
+      analytics: Boolean(analyticsToggle?.checked),
+      marketing: Boolean(marketingToggle?.checked)
+    });
+  };
+
+  document.querySelectorAll("[data-cookie-customize]").forEach((button) => {
+    button.addEventListener("click", openPreferences);
+  });
+
+  document.querySelectorAll("[data-cookie-accept]").forEach((button) => {
+    button.addEventListener("click", acceptAll);
+  });
+
+  document.querySelectorAll("[data-cookie-reject]").forEach((button) => {
+    button.addEventListener("click", rejectOptional);
+  });
+
+  document.querySelectorAll("[data-cookie-save]").forEach((button) => {
+    button.addEventListener("click", savePreferences);
+  });
+
+  closeButton?.addEventListener("click", closePreferences);
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closePreferences();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) closePreferences();
+  });
+
+  const storedConsent = getStoredCookieConsent();
+  if (storedConsent) {
+    updateGoogleConsent(storedConsent);
+    hideBanner();
+    return;
+  }
+
+  setToggleState(defaultCookieConsent);
+  showBanner();
+};
+
+setupCookieConsent();
 
 window.addEventListener("load", () => {
   window.lucide?.createIcons();

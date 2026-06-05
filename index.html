@@ -7,6 +7,34 @@
       name="description"
       content="Centro Terapêutico Amor Fraterno: tratamento humanizado para dependentes químicos e alcoólicos, com equipe multidisciplinar, suporte 24 horas e estrutura acolhedora."
     >
+
+    <!-- Google tag (gtag.js) with Consent Mode -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function gtag(){window.dataLayer.push(arguments);};
+      const savedCookieConsent = (() => {
+        try {
+          return JSON.parse(localStorage.getItem("amorFraternoCookieConsent"));
+        } catch (error) {
+          return null;
+        }
+      })();
+
+      window.gtag("consent", "default", {
+        ad_storage: savedCookieConsent?.marketing ? "granted" : "denied",
+        analytics_storage: savedCookieConsent?.analytics ? "granted" : "denied",
+        ad_user_data: savedCookieConsent?.marketing ? "granted" : "denied",
+        ad_personalization: savedCookieConsent?.marketing ? "granted" : "denied",
+        functionality_storage: "granted",
+        security_storage: "granted",
+        wait_for_update: 500
+      });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HK88EVQ1NM"></script>
+    <script>
+      window.gtag("js", new Date());
+      window.gtag("config", "G-HK88EVQ1NM");
+    </script>
     <meta name="theme-color" content="#005d75">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:type" content="website">
@@ -67,9 +95,10 @@
         <a href="#galeria">Ambientes</a>
         <!-- <a href="#valores">Valores</a> -->
         <a href="#contato">Contato</a>
+        <a href="politica-de-privacidade.html">Privacidade</a>
       </nav>
 
-      <a class="header-cta" href="https://wa.me/5562991096062" target="_blank" rel="noopener">
+      <a class="header-cta" href="https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener">
         <i data-lucide="message-circle" aria-hidden="true"></i>
         WhatsApp
       </a>
@@ -88,7 +117,7 @@
               equipe multidisciplinar e uma estrutura pensada para reconstrução.
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="https://wa.me/5562991096062" target="_blank" rel="noopener">
+              <a class="btn btn-primary" href="https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener">
                 <i data-lucide="phone-call" aria-hidden="true"></i>
                 Falar no WhatsApp
               </a>
@@ -164,7 +193,10 @@
 
         <div class="feature-grid">
           <article class="feature-card" data-aos="fade-up">
-            <img src="http://amorfraterno.com.br/assets/images/reunioes.webp" alt="Reunião terapêutica em grupo na área externa" loading="lazy" decoding="async">
+            <button class="feature-image-button" type="button" data-lightbox-group="estrutura" data-lightbox-src="http://amorfraterno.com.br/assets/images/reunioes.webp" data-lightbox-caption="Terapia de grupo">
+              <img src="http://amorfraterno.com.br/assets/images/reunioes.webp" alt="Reunião terapêutica em grupo na área externa" loading="lazy" decoding="async">
+              <span class="sr-only">Ampliar imagem de terapia de grupo</span>
+            </button>
             <div>
               <i data-lucide="users-round" aria-hidden="true"></i>
               <h3>Terapia de grupo</h3>
@@ -172,7 +204,10 @@
             </div>
           </article>
           <article class="feature-card" data-aos="fade-up" data-aos-delay="70">
-            <img src="http://amorfraterno.com.br/assets/images/area-verde-real.webp" alt="Área verde com paisagismo e fonte" loading="lazy" decoding="async">
+            <button class="feature-image-button" type="button" data-lightbox-group="estrutura" data-lightbox-src="http://amorfraterno.com.br/assets/images/area-verde-real.webp" data-lightbox-caption="Espaço amplo">
+              <img src="http://amorfraterno.com.br/assets/images/area-verde-real.webp" alt="Área verde com paisagismo e fonte" loading="lazy" decoding="async">
+              <span class="sr-only">Ampliar imagem do espaço amplo</span>
+            </button>
             <div>
               <i data-lucide="house" aria-hidden="true"></i>
               <h3>Espaço amplo</h3>
@@ -180,7 +215,10 @@
             </div>
           </article>
           <article class="feature-card" data-aos="fade-up" data-aos-delay="140">
-            <img src="http://amorfraterno.com.br/assets/images/acomodacoes.webp" alt="Acomodações com camas organizadas" loading="lazy" decoding="async">
+            <button class="feature-image-button" type="button" data-lightbox-group="estrutura" data-lightbox-src="http://amorfraterno.com.br/assets/images/acomodacoes.webp" data-lightbox-caption="Boas acomodações">
+              <img src="http://amorfraterno.com.br/assets/images/acomodacoes.webp" alt="Acomodações com camas organizadas" loading="lazy" decoding="async">
+              <span class="sr-only">Ampliar imagem das acomodações</span>
+            </button>
             <div>
               <i data-lucide="bed-double" aria-hidden="true"></i>
               <h3>Boas acomodações</h3>
@@ -188,7 +226,10 @@
             </div>
           </article>
           <article class="feature-card" data-aos="fade-up" data-aos-delay="210">
-            <img src="http://amorfraterno.com.br/assets/images/enfermaria.webp" alt="Sala de atendimento e enfermaria" loading="lazy" decoding="async">
+            <button class="feature-image-button" type="button" data-lightbox-group="estrutura" data-lightbox-src="http://amorfraterno.com.br/assets/images/enfermaria.webp" data-lightbox-caption="Profissionais especializados">
+              <img src="http://amorfraterno.com.br/assets/images/enfermaria.webp" alt="Sala de atendimento e enfermaria" loading="lazy" decoding="async">
+              <span class="sr-only">Ampliar imagem da sala de atendimento</span>
+            </button>
             <div>
               <i data-lucide="brain" aria-hidden="true"></i>
               <h3>Profissionais especializados</h3>
@@ -196,7 +237,10 @@
             </div>
           </article>
           <article class="feature-card" data-aos="fade-up" data-aos-delay="280">
-            <img src="http://amorfraterno.com.br/assets/images/escritorio-real.webp" alt="Escritório administrativo da clínica" loading="lazy" decoding="async">
+            <button class="feature-image-button" type="button" data-lightbox-group="estrutura" data-lightbox-src="http://amorfraterno.com.br/assets/images/escritorio-real.webp" data-lightbox-caption="Suporte 24 horas">
+              <img src="http://amorfraterno.com.br/assets/images/escritorio-real.webp" alt="Escritório administrativo da clínica" loading="lazy" decoding="async">
+              <span class="sr-only">Ampliar imagem do suporte 24 horas</span>
+            </button>
             <div>
               <i data-lucide="clock-3" aria-hidden="true"></i>
               <h3>Suporte 24 horas</h3>
@@ -442,22 +486,22 @@
                 O botão abre uma mensagem pronta para agilizar o primeiro acolhimento.
               </p>
               <div class="contact-actions">
-                <a class="btn btn-whatsapp" href="https://wa.me/5562991096062?text=Ol%C3%A1%2C%20Amor%20Fraterno.%20Vim%20pelo%20site%20e%20gostaria%20de%20receber%20orienta%C3%A7%C3%A3o%20sobre%20tratamento." target="_blank" rel="noopener">
+                <a class="btn btn-whatsapp" href="https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener">
                   <i data-lucide="send" aria-hidden="true"></i>
                   Chamar no WhatsApp
                 </a>
-                <a class="contact-phone" href="tel:+5562991096062">
+                <a class="contact-phone" href="tel:+5562992096062">
                   <i data-lucide="phone" aria-hidden="true"></i>
-                  (62) 99109-6062
+                  (62) 992096062
                 </a>
               </div>
             </article>
 
             <div class="contact-grid" aria-label="Canais e informações de contato">
-              <a class="contact-card contact-card-whatsapp" href="https://wa.me/5562991096062?text=Ol%C3%A1%2C%20Amor%20Fraterno.%20Vim%20pelo%20site%20e%20gostaria%20de%20receber%20orienta%C3%A7%C3%A3o%20sobre%20tratamento." target="_blank" rel="noopener">
+              <a class="contact-card contact-card-whatsapp" href="https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener">
                 <i data-lucide="message-circle" aria-hidden="true"></i>
                 <span>WhatsApp</span>
-                <strong>(62) 99109-6062</strong>
+                <strong>(62) 992096062</strong>
                 <em>Conversar no WhatsApp</em>
               </a>
               <a class="contact-card contact-card-email" href="mailto:centroterapeuticoamorfraterno@gmail.com">
@@ -484,7 +528,7 @@
       </section>
     </main>
 
-    <div class="lightbox" data-lightbox hidden role="dialog" aria-modal="true" aria-label="Galeria de ambientes">
+    <div class="lightbox" data-lightbox hidden role="dialog" aria-modal="true" aria-label="Galeria de imagens">
       <button class="lightbox-close" type="button" data-lightbox-close aria-label="Fechar galeria">
         <i data-lucide="x" aria-hidden="true"></i>
       </button>
@@ -525,12 +569,91 @@
             <strong>2026 Centro Terapêutico Amor Fraterno</strong>
           </div>
         </div>
+
+        <div class="footer-legal" aria-label="Links legais">
+          <a href="politica-de-privacidade.html">Política de Privacidade</a>
+          <button type="button" data-cookie-customize>Preferências de cookies</button>
+        </div>
       </div>
     </footer>
 
-    <a class="floating-whatsapp" href="https://wa.me/5562991096062" target="_blank" rel="noopener" aria-label="Chamar Amor Fraterno no WhatsApp">
+    <a class="floating-whatsapp" href="https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener" aria-label="Chamar Amor Fraterno no WhatsApp">
       <i data-lucide="message-circle" aria-hidden="true"></i>
     </a>
+
+    <div class="cookie-banner" data-cookie-banner hidden role="region" aria-label="Aviso de cookies">
+      <div class="cookie-summary">
+        <span class="cookie-icon" aria-hidden="true">
+          <i data-lucide="shield-check"></i>
+        </span>
+        <div>
+          <strong>Privacidade e cookies</strong>
+          <p>
+            Usamos cookies necessários e, com sua permissão, cookies de análise e publicidade.
+          </p>
+          <a href="politica-de-privacidade.html#cookies">Ler Política de Privacidade</a>
+        </div>
+      </div>
+      <div class="cookie-actions">
+        <button class="cookie-button cookie-button-ghost" type="button" data-cookie-customize>Configurar</button>
+        <button class="cookie-button cookie-button-secondary" type="button" data-cookie-reject>Rejeitar não essenciais</button>
+        <button class="cookie-button cookie-button-primary" type="button" data-cookie-accept>Aceitar todos</button>
+      </div>
+    </div>
+
+    <div class="cookie-modal" data-cookie-modal hidden role="dialog" aria-modal="true" aria-labelledby="cookie-modal-title">
+      <div class="cookie-modal-panel">
+        <button class="cookie-modal-close" type="button" data-cookie-close aria-label="Fechar preferências de cookies">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+        <span class="section-kicker">Preferências de privacidade</span>
+        <h2 id="cookie-modal-title">Escolha como podemos usar cookies.</h2>
+        <p>
+          Você pode aceitar todos, rejeitar cookies não essenciais ou permitir apenas as categorias que preferir.
+        </p>
+
+        <div class="cookie-options">
+          <label class="cookie-option">
+            <span class="cookie-option-text">
+              <strong>Necessários</strong>
+              <span>Mantêm recursos básicos do site, segurança e preferências essenciais. Estão sempre ativos.</span>
+            </span>
+            <span class="cookie-toggle-control">
+              <input class="cookie-switch-input" type="checkbox" checked disabled>
+              <span class="cookie-switch" aria-hidden="true"></span>
+            </span>
+          </label>
+
+          <label class="cookie-option">
+            <span class="cookie-option-text">
+              <strong>Análise</strong>
+              <span>Ajudam a entender visitas, páginas acessadas e desempenho do site por meio de estatísticas.</span>
+            </span>
+            <span class="cookie-toggle-control">
+              <input class="cookie-switch-input" type="checkbox" data-cookie-toggle="analytics">
+              <span class="cookie-switch" aria-hidden="true"></span>
+            </span>
+          </label>
+
+          <label class="cookie-option">
+            <span class="cookie-option-text">
+              <strong>Publicidade</strong>
+              <span>Permitem medir campanhas, conversões e, quando usado, exibir anúncios personalizados em plataformas de anúncio online.</span>
+            </span>
+            <span class="cookie-toggle-control">
+              <input class="cookie-switch-input" type="checkbox" data-cookie-toggle="marketing">
+              <span class="cookie-switch" aria-hidden="true"></span>
+            </span>
+          </label>
+        </div>
+
+        <div class="cookie-modal-actions">
+          <button class="cookie-button cookie-button-secondary" type="button" data-cookie-reject>Rejeitar não essenciais</button>
+          <button class="cookie-button cookie-button-ghost" type="button" data-cookie-save>Salvar preferências</button>
+          <button class="cookie-button cookie-button-primary" type="button" data-cookie-accept>Aceitar todos</button>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
