@@ -1,0 +1,89 @@
+<?php
+/**
+ * Template Name: Arquivo de publicações
+ * Template Post Type: page
+ *
+ * @package Amor_Fraterno
+ */
+
+get_header();
+
+$paged = max(1, (int) get_query_var('paged'), (int) get_query_var('page'));
+$posts_query = new WP_Query(array(
+    'post_type' => 'post',
+    'post_status' => 'publish',
+    'posts_per_page' => (int) get_option('posts_per_page'),
+    'paged' => $paged,
+));
+?>
+<main id="conteudo">
+    <section class="blog-hero" aria-labelledby="blog-title">
+        <div class="blog-hero-bg" data-parallax="0.18"></div>
+        <div class="blog-hero-inner" data-aos="fade-up">
+            <?php amor_breadcrumbs(); ?>
+            <span class="section-kicker">Publicações</span>
+            <h1 id="blog-title"><?php the_title(); ?></h1>
+            <?php if (has_excerpt()) : ?>
+                <p><?php echo esc_html(get_the_excerpt()); ?></p>
+            <?php else : ?>
+                <p>Orientações sobre acolhimento, tratamento, rotina terapêutica e apoio para famílias.</p>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <section class="blog-archive section-white" aria-label="Todas as publicações">
+        <div class="blog-layout">
+            <div class="blog-main">
+                <div class="blog-toolbar" data-aos="fade-up">
+                    <div>
+                        <span>Blog Amor Fraterno</span>
+                        <strong>Todas as publicações</strong>
+                    </div>
+                    <a href="<?php echo esc_url(home_url('/#publicacoes')); ?>">
+                        <i data-lucide="arrow-left" aria-hidden="true"></i>
+                        Voltar para a home
+                    </a>
+                </div>
+
+                <div class="archive-post-grid">
+                    <?php if ($posts_query->have_posts()) : ?>
+                        <?php while ($posts_query->have_posts()) : $posts_query->the_post(); ?>
+                            <article <?php post_class('archive-post-card'); ?> data-aos="fade-up">
+                                <a class="archive-post-image" href="<?php the_permalink(); ?>">
+                                    <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } else { echo '<img src="' . amor_asset('assets/images/equipe-atendimento.webp') . '" alt="" loading="lazy" decoding="async">'; } ?>
+                                </a>
+                                <div class="archive-post-body">
+                                    <span><?php echo esc_html(get_the_category()[0]->name ?? 'Publicação'); ?></span>
+                                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                    <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 24)); ?></p>
+                                    <a class="post-read-more" href="<?php the_permalink(); ?>">Ler publicação</a>
+                                </div>
+                            </article>
+                        <?php endwhile; ?>
+                        <?php wp_reset_postdata(); ?>
+                    <?php else : ?>
+                        <article class="archive-post-card">
+                            <div class="archive-post-body">
+                                <h2>Nenhuma publicação encontrada</h2>
+                                <p>Novos conteúdos aparecerão aqui assim que forem publicados.</p>
+                            </div>
+                        </article>
+                    <?php endif; ?>
+                </div>
+
+                <?php
+                echo wp_kses_post(paginate_links(array(
+                    'total' => $posts_query->max_num_pages,
+                    'current' => $paged,
+                    'prev_text' => 'Anteriores',
+                    'next_text' => 'Próximas',
+                    'type' => 'list',
+                )));
+                ?>
+            </div>
+
+            <?php get_sidebar(); ?>
+        </div>
+    </section>
+</main>
+<?php get_footer(); ?>
