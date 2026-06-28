@@ -86,12 +86,85 @@ add_action('after_switch_theme', 'amor_ensure_primary_menu');
 add_action('init', 'amor_ensure_primary_menu');
 add_action('admin_init', 'amor_ensure_primary_menu');
 
+function amor_ensure_privacy_page() {
+    $slug = 'politica-de-privacidade';
+    $page = get_page_by_path($slug);
+
+    if (!$page) {
+        $page_id = wp_insert_post(array(
+            'post_title' => 'Política de Privacidade',
+            'post_name' => $slug,
+            'post_type' => 'page',
+            'post_status' => 'publish',
+            'post_content' => '',
+        ));
+
+        if (is_wp_error($page_id) || !$page_id) {
+            return;
+        }
+    } else {
+        $page_id = (int) $page->ID;
+
+        if ('publish' !== get_post_status($page_id)) {
+            wp_update_post(array(
+                'ID' => $page_id,
+                'post_status' => 'publish',
+            ));
+        }
+    }
+
+    update_post_meta($page_id, '_wp_page_template', 'page-politica-de-privacidade.php');
+    update_option('wp_page_for_privacy_policy', $page_id);
+}
+add_action('after_switch_theme', 'amor_ensure_privacy_page');
+add_action('init', 'amor_ensure_privacy_page');
+add_action('admin_init', 'amor_ensure_privacy_page');
+
 function amor_primary_menu_fallback() {
     echo '<ul class="menu amor-menu-fallback">';
     foreach (amor_default_primary_menu_items() as $item) {
         echo '<li class="menu-item"><a href="' . esc_url($item['url']) . '">' . esc_html($item['title']) . '</a></li>';
     }
     echo '</ul>';
+}
+
+function amor_primary_menu() {
+    echo '<ul id="menu-principal-amor-fraterno" class="menu">';
+
+    foreach (amor_default_primary_menu_items() as $item) {
+        $is_current = amor_is_primary_menu_item_current($item);
+        $classes = array('menu-item');
+
+        if ($is_current) {
+            $classes[] = 'current-menu-item';
+        }
+
+        echo '<li class="' . esc_attr(implode(' ', $classes)) . '">';
+        echo '<a href="' . esc_url($item['url']) . '"' . ($is_current ? ' aria-current="page"' : '') . '>' . esc_html($item['title']) . '</a>';
+        echo '</li>';
+    }
+
+    echo '</ul>';
+}
+
+function amor_is_primary_menu_item_current($item) {
+    $title = isset($item['title']) ? $item['title'] : '';
+    $request_path = isset($_SERVER['REQUEST_URI']) ? (string) parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH) : '';
+
+    if ('Início' === $title) {
+        return is_front_page();
+    }
+
+    if ('Publicações' === $title) {
+        return is_home()
+            || amor_is_posts_archive()
+            || is_singular('post')
+            || is_archive()
+            || is_search()
+            || (bool) preg_match('#^/(novidades|publicacoes|category|tag|author)(/|$)#', $request_path);
+    }
+
+    return false;
 }
 
 function amor_update_posts_menu_item_url($menu_id) {
@@ -142,6 +215,8 @@ add_action('widgets_init', 'amor_widgets_init');
 function amor_scripts() {
     $style_path = get_stylesheet_directory() . '/style.css';
     $style_version = file_exists($style_path) ? (string) filemtime($style_path) : wp_get_theme()->get('Version');
+    $script_path = get_template_directory() . '/script.js';
+    $script_version = file_exists($script_path) ? (string) filemtime($script_path) : wp_get_theme()->get('Version');
 
     wp_enqueue_style('amor-fonts', 'https://fonts.googleapis.com/css2?family=Ephesis&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap', array(), null);
     wp_enqueue_style('aos', 'https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css', array(), '2.3.4');
@@ -151,7 +226,7 @@ function amor_scripts() {
     wp_enqueue_script('aos', 'https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js', array(), '2.3.4', true);
     wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11', true);
     wp_enqueue_script('lucide', 'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js', array(), null, true);
-    wp_enqueue_script('amor-script', get_template_directory_uri() . '/script.js', array('aos', 'swiper', 'lucide'), wp_get_theme()->get('Version'), true);
+    wp_enqueue_script('amor-script', get_template_directory_uri() . '/script.js', array('aos', 'swiper', 'lucide'), $script_version, true);
 }
 add_action('wp_enqueue_scripts', 'amor_scripts');
 

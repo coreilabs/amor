@@ -1,0 +1,346 @@
+- generic [active] [ref=e1]:
+  - link "Pular para o conteúdo" [ref=e2] [cursor=pointer]:
+    - /url: "#conteudo"
+  - banner [ref=e3]:
+    - link "Amor Fraterno" [ref=e4] [cursor=pointer]:
+      - /url: https://amorfraterno.com.br/#inicio
+      - img [ref=e5]
+      - img "Amor Fraterno" [ref=e6]
+    - navigation [ref=e7]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Início" [ref=e10] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#inicio
+        - listitem [ref=e11]:
+          - link "Sobre" [ref=e12] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#sobre
+        - listitem [ref=e13]:
+          - link "Estrutura" [ref=e14] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#estrutura
+        - listitem [ref=e15]:
+          - link "Tratamento" [ref=e16] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#tratamento
+        - listitem [ref=e17]:
+          - link "Ambientes" [ref=e18] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#galeria
+        - listitem [ref=e19]:
+          - link "Publicações" [ref=e20] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/novidades/
+        - listitem [ref=e21]:
+          - link "Contato" [ref=e22] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/#contato
+    - link "WhatsApp" [ref=e23] [cursor=pointer]:
+      - /url: https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es.
+      - img [ref=e24]
+      - text: WhatsApp
+  - main [ref=e26]:
+    - region "Centro Terapêutico Amor Fraterno" [ref=e27]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: Acolhimento com amor, tratamento com propósito
+          - heading "Centro Terapêutico Amor Fraterno" [level=1] [ref=e33]
+          - paragraph [ref=e34]: Tratamento humanizado para dependentes químicos e alcoólicos, com suporte 24 horas, equipe multidisciplinar e uma estrutura pensada para reconstrução.
+          - generic [ref=e35]:
+            - link "Falar no WhatsApp" [ref=e36] [cursor=pointer]:
+              - /url: https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es.
+              - img [ref=e37]
+              - text: Falar no WhatsApp
+            - link "Conhecer a estrutura" [ref=e41] [cursor=pointer]:
+              - /url: "#estrutura"
+              - img [ref=e42]
+              - text: Conhecer a estrutura
+        - complementary "Resumo do atendimento" [ref=e44]:
+          - img "Fachada do Centro Terapêutico Amor Fraterno" [ref=e46]
+          - generic [ref=e47]:
+            - img [ref=e48]
+            - generic [ref=e50]: Aqui, cada vida importa
+      - generic "Diferenciais" [ref=e51]:
+        - generic [ref=e52]:
+          - img [ref=e53]
+          - strong [ref=e56]: 24h
+          - generic [ref=e57]: suporte e coordenação
+        - generic [ref=e58]:
+          - img [ref=e59]
+          - strong [ref=e63]: Equipe
+          - generic [ref=e64]: psicólogo, médico e terapeuta
+        - generic [ref=e65]:
+          - img [ref=e66]
+          - strong [ref=e69]: Ambiente
+          - generic [ref=e70]: amplo, seguro e com natureza
+    - generic [ref=e72]:
+      - img "Logotipo Amor Fraterno" [ref=e74]
+      - generic [ref=e75]:
+        - generic [ref=e76]: Sobre a clínica
+        - heading "Recuperação com presença, cuidado e direção." [level=2] [ref=e77]
+        - paragraph [ref=e78]: Somos um centro terapêutico destinado à recuperação de dependentes químicos e alcoolistas. Nossa missão é oferecer recuperação de forma humanizada, com diversas áreas terapêuticas e ferramentas para que os acolhidos se mantenham abstinentes, ressignificando suas vivências e suas vidas.
+        - generic [ref=e79]:
+          - img [ref=e80]
+          - generic [ref=e83]: Acolher é o primeiro passo. Transformar vidas é o nosso propósito.
+    - generic [ref=e84]:
+      - generic [ref=e86]:
+        - generic [ref=e87]: Estrutura completa
+        - heading "Um espaço preparado para um novo recomeço." [level=2] [ref=e88]
+        - paragraph [ref=e89]: A clínica combina apoio terapêutico, áreas de convivência, acomodações e acompanhamento profissional para acolher com segurança.
+      - generic [ref=e90]:
+        - article [ref=e91]:
+          - button "Reunião terapêutica em grupo na área externa Ampliar imagem de Terapia de grupo" [ref=e92]:
+            - img "Reunião terapêutica em grupo na área externa" [ref=e93]
+            - generic [ref=e94]: Ampliar imagem de Terapia de grupo
+          - generic [ref=e95]:
+            - img [ref=e96]
+            - heading "Terapia de grupo" [level=3] [ref=e100]
+            - paragraph [ref=e101]: Fortalecimento, apoio e reconstrução em conjunto.
+        - article [ref=e102]:
+          - button "Área verde com paisagismo e fonte Ampliar imagem de Espaço amplo" [ref=e103]:
+            - img "Área verde com paisagismo e fonte" [ref=e104]
+            - generic [ref=e105]: Ampliar imagem de Espaço amplo
+          - generic [ref=e106]:
+            - img [ref=e107]
+            - heading "Espaço amplo" [level=3] [ref=e110]
+            - paragraph [ref=e111]: Ambiente seguro, tranquilo e em contato com a natureza.
+        - article [ref=e112]:
+          - button "Acomodações com camas organizadas Ampliar imagem de Boas acomodações" [ref=e113]:
+            - img "Acomodações com camas organizadas" [ref=e114]
+            - generic [ref=e115]: Ampliar imagem de Boas acomodações
+          - generic [ref=e116]:
+            - img [ref=e117]
+            - heading "Boas acomodações" [level=3] [ref=e120]
+            - paragraph [ref=e121]: Conforto e estrutura para o bem-estar dos acolhidos.
+        - article [ref=e122]:
+          - button "Sala de atendimento e enfermaria Ampliar imagem de Profissionais especializados" [ref=e123]:
+            - img "Sala de atendimento e enfermaria" [ref=e124]
+            - generic [ref=e125]: Ampliar imagem de Profissionais especializados
+          - generic [ref=e126]:
+            - img [ref=e127]
+            - heading "Profissionais especializados" [level=3] [ref=e135]
+            - paragraph [ref=e136]: Psicólogo, médico, terapeuta e coordenadores.
+        - article [ref=e137]:
+          - button "Escritório administrativo da clínica Ampliar imagem de Suporte 24 horas" [ref=e138]:
+            - img "Escritório administrativo da clínica" [ref=e139]
+            - generic [ref=e140]: Ampliar imagem de Suporte 24 horas
+          - generic [ref=e141]:
+            - img [ref=e142]
+            - heading "Suporte 24 horas" [level=3] [ref=e145]
+            - paragraph [ref=e146]: Equipe preparada para acolher, orientar e guiar.
+    - generic [ref=e147]:
+      - img "Espaço para terapias e interação" [ref=e149]
+      - generic [ref=e150]:
+        - generic [ref=e151]: Atendimento humanizado
+        - heading "Cada história é única. Cada tratamento também." [level=2] [ref=e152]
+        - paragraph [ref=e153]: O atendimento combina acompanhamentos em grupo e individuais, fortalecendo a autonomia e o vínculo dos acolhidos com a própria recuperação.
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - generic [ref=e159]: Atendimentos em grupo
+          - generic [ref=e160]:
+            - img [ref=e161]
+            - generic [ref=e165]: Acompanhamento individual
+          - generic [ref=e166]:
+            - img [ref=e167]
+            - generic [ref=e171]: Rede profissional multidisciplinar
+    - region "Um caminho cuidado de ponta a ponta." [ref=e172]:
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - generic [ref=e177]: Jornada de acolhimento
+          - heading "Um caminho cuidado de ponta a ponta." [level=2] [ref=e178]
+          - paragraph [ref=e179]: Do primeiro contato à rotina terapêutica, a proposta é acolher com clareza, presença e acompanhamento constante.
+        - generic "Etapas do acolhimento" [ref=e180]:
+          - article [ref=e181]:
+            - img [ref=e182]
+            - generic [ref=e184]: "01"
+            - heading "Conversa inicial" [level=3] [ref=e185]
+            - paragraph [ref=e186]: Escuta cuidadosa para entender a história e orientar os próximos passos.
+          - article [ref=e187]:
+            - img [ref=e188]
+            - generic [ref=e192]: "02"
+            - heading "Avaliação" [level=3] [ref=e193]
+            - paragraph [ref=e194]: Equipe multidisciplinar organiza o plano terapêutico de forma individual.
+          - article [ref=e195]:
+            - img [ref=e196]
+            - generic [ref=e199]: "03"
+            - heading "Rotina terapêutica" [level=3] [ref=e200]
+            - paragraph [ref=e201]: Atividades em grupo, atendimentos individuais e convivência estruturada.
+          - article [ref=e202]:
+            - img [ref=e203]
+            - generic [ref=e206]: "04"
+            - heading "Suporte contínuo" [level=3] [ref=e207]
+            - paragraph [ref=e208]: Coordenação presente 24 horas para acolher, orientar e acompanhar.
+    - generic [ref=e209]:
+      - generic [ref=e210]:
+        - generic [ref=e211]: Ambientes
+        - heading "Estrutura que acolhe e organiza a rotina." [level=2] [ref=e212]
+      - generic "Galeria de ambientes" [ref=e213]:
+        - generic [ref=e214]:
+          - group "1 / 9" [ref=e215]:
+            - img "Entrada do Centro Terapêutico Amor Fraterno" [ref=e216]
+            - generic [ref=e217]: Entrada
+          - group "2 / 9" [ref=e218]:
+            - img "Área de lazer com piscina" [ref=e219]
+            - generic [ref=e220]: Lazer
+          - group "3 / 9" [ref=e221]:
+            - img "Área verde com lago ornamental e paisagismo" [ref=e222]
+            - generic [ref=e223]: Área verde
+          - group "4 / 9" [ref=e224]:
+            - img "Espaço coberto para terapias e convivência" [ref=e225]
+            - generic [ref=e226]: Terapias
+          - group "5 / 9" [ref=e227]:
+            - img "Atividade terapêutica em grupo" [ref=e228]
+            - generic [ref=e229]: Reuniões
+          - group "6 / 9" [ref=e230]:
+            - img "Dormitório organizado com camas" [ref=e231]
+            - generic [ref=e232]: Acomodações
+          - group "7 / 9" [ref=e233]:
+            - img "Cozinha da clínica" [ref=e234]
+            - generic [ref=e235]: Cozinha
+          - group "8 / 9" [ref=e236]:
+            - img "Piscina e área externa" [ref=e237]
+            - generic [ref=e238]: Piscina
+          - group "9 / 9" [ref=e239]:
+            - img "Escritório da clínica" [ref=e240]
+            - generic [ref=e241]: Escritório
+        - generic [ref=e242]:
+          - button "Previous slide" [ref=e243] [cursor=pointer]:
+            - img [ref=e244]
+          - generic [ref=e246]:
+            - button "Go to slide 1" [ref=e247] [cursor=pointer]
+            - button "Go to slide 2" [ref=e248] [cursor=pointer]
+            - button "Go to slide 3" [ref=e249] [cursor=pointer]
+            - button "Go to slide 4" [ref=e250] [cursor=pointer]
+            - button "Go to slide 5" [ref=e251] [cursor=pointer]
+            - button "Go to slide 6" [ref=e252] [cursor=pointer]
+            - button "Go to slide 7" [ref=e253] [cursor=pointer]
+            - button "Go to slide 8" [ref=e254] [cursor=pointer]
+            - button "Go to slide 9" [ref=e255] [cursor=pointer]
+          - button "Next slide" [ref=e256] [cursor=pointer]:
+            - img [ref=e257]
+    - generic [ref=e259]:
+      - generic [ref=e261]:
+        - generic [ref=e262]: Missão, visão e valores
+        - heading "Princípios que aparecem na rotina, não só no discurso." [level=2] [ref=e263]
+        - paragraph [ref=e264]: Acolher com clareza, sustentar a abstinência e reconstruir vínculos são compromissos presentes em cada conversa, atividade terapêutica e decisão de cuidado.
+      - generic [ref=e265]:
+        - complementary [ref=e266]:
+          - generic [ref=e267]: Mapa do cuidado
+          - heading "Da escuta inicial à autonomia possível, cada etapa precisa ter presença." [level=3] [ref=e268]
+          - paragraph [ref=e269]: "A Amor Fraterno trabalha para transformar acolhimento em rotina: conversa clara, vínculo terapêutico, equipe presente e uma estrutura que ajuda o acolhido a reencontrar direção."
+        - generic "Missão, visão e valores da Amor Fraterno" [ref=e270]:
+          - article [ref=e271]:
+            - generic [ref=e272]: "01"
+            - img [ref=e274]
+            - heading "Missão" [level=3] [ref=e278]
+            - strong [ref=e279]: Acolher dependentes químicos e alcoolistas com presença, método e respeito pela história de cada pessoa.
+          - article [ref=e280]:
+            - generic [ref=e281]: "02"
+            - img [ref=e283]
+            - heading "Visão" [level=3] [ref=e291]
+            - strong [ref=e292]: Ser reconhecida por unir estrutura, escuta e direção em cada etapa do recomeço.
+          - article [ref=e293]:
+            - generic [ref=e294]: "03"
+            - img [ref=e296]
+            - heading "Valores" [level=3] [ref=e299]
+            - strong [ref=e300]: Valores que dão forma ao cuidado diário.
+            - list "Valores da Amor Fraterno" [ref=e301]:
+              - listitem [ref=e302]: Amor fraternal e escuta sem julgamento
+              - listitem [ref=e303]: Respeito à história e aos limites
+              - listitem [ref=e304]: Rotina terapêutica com equipe presente
+              - listitem [ref=e305]: Autonomia, abstinência e família orientada
+    - region "Conteúdos para orientar famílias e apoiar recomeços." [ref=e306]:
+      - generic [ref=e307]:
+        - generic [ref=e308]: Últimas Publicações
+        - heading "Conteúdos para orientar famílias e apoiar recomeços." [level=2] [ref=e309]
+        - paragraph [ref=e310]: Materiais sobre acolhimento, tratamento, família e rotina terapêutica.
+      - generic "Publicações recentes" [ref=e311]:
+        - article [ref=e312]:
+          - link [ref=e313] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/hello-world/
+          - generic [ref=e314]:
+            - generic [ref=e315]: Blog
+            - heading "Como identificar os primeiros sinais da dependência química." [level=3] [ref=e316]:
+              - link "Como identificar os primeiros sinais da dependência química." [ref=e317] [cursor=pointer]:
+                - /url: https://amorfraterno.com.br/hello-world/
+            - paragraph
+    - generic [ref=e320]:
+      - generic [ref=e321]:
+        - generic [ref=e322]: Contato
+        - heading "Fale com a Amor Fraterno." [level=2] [ref=e323]
+        - paragraph [ref=e324]: Envie uma mensagem e receba orientação inicial com acolhimento, clareza e respeito ao momento da família.
+      - generic [ref=e325]:
+        - article [ref=e326]:
+          - img [ref=e328]
+          - generic [ref=e330]: WhatsApp principal
+          - heading "O primeiro passo pode começar com uma conversa." [level=3] [ref=e331]
+          - paragraph [ref=e332]: O botão abre uma mensagem pronta para agilizar o primeiro acolhimento.
+          - generic [ref=e333]:
+            - link "Chamar no WhatsApp" [ref=e334] [cursor=pointer]:
+              - /url: https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es.
+              - img [ref=e335]
+              - text: Chamar no WhatsApp
+            - link "(62) 99209-6062" [ref=e338] [cursor=pointer]:
+              - /url: tel:+5562992096062
+              - img [ref=e339]
+              - text: (62) 99209-6062
+        - generic "Canais e informações de contato" [ref=e341]:
+          - link "WhatsApp (62) 99209-6062 Conversar no WhatsApp" [ref=e342] [cursor=pointer]:
+            - /url: https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es.
+            - img [ref=e343]
+            - generic [ref=e345]: WhatsApp
+            - strong [ref=e346]: (62) 99209-6062
+            - emphasis [ref=e347]: Conversar no WhatsApp
+          - link "E-mail institucional centroterapeuticoamorfraterno@gmail.com Enviar e-mail" [ref=e348] [cursor=pointer]:
+            - /url: mailto:centroterapeuticoamorfraterno@gmail.com
+            - img [ref=e349]
+            - generic [ref=e352]: E-mail institucional
+            - strong [ref=e353]: centroterapeuticoamorfraterno@gmail.com
+            - emphasis [ref=e354]: Enviar e-mail
+          - generic [ref=e355]:
+            - img [ref=e356]
+            - generic [ref=e359]: Localização
+            - strong [ref=e360]: Aparecida de Goiânia - Goiás
+            - emphasis [ref=e361]: Informações na triagem
+          - generic [ref=e362]:
+            - img [ref=e363]
+            - generic [ref=e365]: Acolhimento
+            - strong [ref=e366]: Orientação para famílias e responsáveis
+            - emphasis [ref=e367]: Escuta humanizada
+  - contentinfo [ref=e368]:
+    - generic [ref=e370]:
+      - generic [ref=e371]:
+        - link "Amor Fraterno" [ref=e372] [cursor=pointer]:
+          - /url: https://amorfraterno.com.br/#inicio
+          - img [ref=e373]
+          - img "Amor Fraterno" [ref=e374]
+        - paragraph [ref=e375]: Acolhimento que transforma. Amor que restaura. Esperança que renasce.
+      - generic [ref=e376]:
+        - generic "Informações de contato e localização" [ref=e377]:
+          - generic [ref=e378]:
+            - img [ref=e379]
+            - generic [ref=e382]: Situado em
+            - strong [ref=e383]: Aparecida de Goiânia - Goiás
+          - generic [ref=e384]:
+            - generic [ref=e385]: ©
+            - generic [ref=e386]: Copyright
+            - strong [ref=e387]: 2026 Amor Fraterno
+        - generic "Links legais" [ref=e388]:
+          - link "Política de Privacidade" [ref=e389] [cursor=pointer]:
+            - /url: https://amorfraterno.com.br/politica-de-privacidade/
+          - button "Preferências de cookies" [ref=e390] [cursor=pointer]
+      - generic [ref=e391]:
+        - heading "Localização:" [level=2] [ref=e392]
+        - generic "Mapa da localização" [ref=e393]:
+          - iframe [ref=e394]:
+            
+  - link "Chamar Amor Fraterno no WhatsApp" [ref=e395] [cursor=pointer]:
+    - /url: https://wa.me/5562992096062?text=Vim%20pelo%20site%20do%20Centro%20Terap%C3%AAutico%20Amor%20Fraterno%20e%20quero%20mais%20informa%C3%A7%C3%B5es.
+    - img [ref=e396]
+  - region "Aviso de cookies" [ref=e398]:
+    - generic [ref=e399]:
+      - img [ref=e401]
+      - generic [ref=e404]:
+        - strong [ref=e405]: Privacidade e cookies
+        - paragraph [ref=e406]: Usamos cookies necessários e, com sua permissão, cookies de análise e publicidade.
+        - link "Ler Política de Privacidade" [ref=e407] [cursor=pointer]:
+          - /url: https://amorfraterno.com.br/politica-de-privacidade/#cookies
+    - generic [ref=e408]:
+      - button "Configurar" [ref=e409] [cursor=pointer]
+      - button "Rejeitar não essenciais" [ref=e410] [cursor=pointer]
+      - button "Aceitar todos" [ref=e411] [cursor=pointer]

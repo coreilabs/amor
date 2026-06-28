@@ -24,24 +24,6 @@
                 <?php wp_list_categories(array('title_li' => '', 'show_count' => false)); ?>
             </ul>
         </div>
-        <div class="sidebar-widget">
-            <h2>Recentes</h2>
-            <div class="sidebar-recent-posts">
-                <?php
-                $recent = new WP_Query(array('posts_per_page' => 3, 'ignore_sticky_posts' => true));
-                while ($recent->have_posts()) :
-                    $recent->the_post();
-                    ?>
-                    <a href="<?php the_permalink(); ?>">
-                        <?php if (has_post_thumbnail()) { the_post_thumbnail('thumbnail', array('loading' => 'lazy', 'decoding' => 'async')); } ?>
-                        <span><?php the_title(); ?></span>
-                    </a>
-                    <?php
-                endwhile;
-                wp_reset_postdata();
-                ?>
-            </div>
-        </div>
     <?php endif; ?>
 
     <div class="sidebar-widget sidebar-cta">

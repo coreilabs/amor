@@ -32,16 +32,7 @@
     </button>
 
     <nav class="main-nav" id="menu-principal" data-nav>
-        <?php
-        wp_nav_menu(array(
-            'theme_location' => 'primary',
-            'container' => false,
-            'menu_class' => 'menu',
-            'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-            'fallback_cb' => 'amor_primary_menu_fallback',
-            'depth' => 1,
-        ));
-        ?>
+        <?php amor_primary_menu(); ?>
     </nav>
 
     <a class="header-cta" href="<?php echo amor_whatsapp_url(); ?>" target="_blank" rel="noopener">

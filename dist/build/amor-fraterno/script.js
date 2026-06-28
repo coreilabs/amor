@@ -73,6 +73,88 @@ window.addEventListener("load", requestParallax);
 window.addEventListener("scroll", requestParallax, { passive: true });
 window.addEventListener("resize", requestParallax);
 
+const setupSinglePostSidebar = () => {
+  const layout = document.querySelector(".single-post-layout");
+  const sidebar = document.querySelector(".blog-sidebar.single-post-sidebar");
+  if (!layout || !sidebar) return;
+
+  const desktopQuery = window.matchMedia("(min-width: 981px)");
+  let sidebarTicking = false;
+
+  const resetSidebar = () => {
+    sidebar.classList.remove("is-fixed", "is-anchored");
+    sidebar.style.removeProperty("--single-sidebar-top");
+    sidebar.style.removeProperty("--single-sidebar-left");
+    sidebar.style.removeProperty("--single-sidebar-layout-left");
+    sidebar.style.removeProperty("--single-sidebar-width");
+    sidebar.style.removeProperty("--single-sidebar-end-top");
+  };
+
+  const updateSidebar = () => {
+    sidebarTicking = false;
+
+    if (!desktopQuery.matches) {
+      resetSidebar();
+      return;
+    }
+
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    const layoutRect = layout.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+    const layoutTop = layoutRect.top + scrollY;
+    const layoutHeight = layout.offsetHeight;
+    const computedLayout = window.getComputedStyle(layout);
+    const paddingRight = Number.parseFloat(computedLayout.paddingRight) || 24;
+    const paddingBottom = Number.parseFloat(computedLayout.paddingBottom) || 0;
+    const headerBottom = header?.getBoundingClientRect().bottom || 0;
+    const topOffset = Math.round(headerBottom + 16);
+    const sidebarWidth = Math.min(330, Math.max(260, layoutRect.width - (paddingRight * 2)));
+    const sidebarLeft = Math.round(layoutRect.right - paddingRight - sidebarWidth);
+    const sidebarLayoutLeft = Math.round(sidebarLeft - layoutRect.left);
+    const sidebarHeight = sidebar.offsetHeight;
+    const stopY = layoutTop + layoutHeight - paddingBottom - sidebarHeight - topOffset;
+    const startY = layoutTop - topOffset;
+
+    sidebar.style.setProperty("--single-sidebar-top", `${topOffset}px`);
+    sidebar.style.setProperty("--single-sidebar-left", `${sidebarLeft}px`);
+    sidebar.style.setProperty("--single-sidebar-layout-left", `${sidebarLayoutLeft}px`);
+    sidebar.style.setProperty("--single-sidebar-width", `${sidebarWidth}px`);
+    sidebar.style.setProperty("--single-sidebar-end-top", `${Math.max(0, layoutHeight - paddingBottom - sidebarHeight)}px`);
+
+    if (scrollY <= startY) {
+      sidebar.classList.remove("is-fixed", "is-anchored");
+      return;
+    }
+
+    if (scrollY >= stopY) {
+      sidebar.classList.remove("is-fixed");
+      sidebar.classList.add("is-anchored");
+      return;
+    }
+
+    sidebar.classList.add("is-fixed");
+    sidebar.classList.remove("is-anchored");
+
+    if (sidebarLeft + sidebarWidth > viewportWidth) {
+      resetSidebar();
+    }
+  };
+
+  const requestSidebarUpdate = () => {
+    if (sidebarTicking) return;
+    sidebarTicking = true;
+    requestAnimationFrame(updateSidebar);
+  };
+
+  updateSidebar();
+  window.addEventListener("load", requestSidebarUpdate);
+  window.addEventListener("scroll", requestSidebarUpdate, { passive: true });
+  window.addEventListener("resize", requestSidebarUpdate);
+  desktopQuery.addEventListener?.("change", requestSidebarUpdate);
+};
+
+setupSinglePostSidebar();
+
 const setupLightbox = () => {
   const sourceItems = [
     ...document.querySelectorAll(".gallery-item:not(.swiper-slide-duplicate), [data-lightbox-src]")

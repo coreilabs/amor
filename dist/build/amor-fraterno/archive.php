@@ -19,12 +19,14 @@ get_header();
                     printf('Resultados para: %s', esc_html(get_search_query()));
                 } elseif (is_home() || amor_is_posts_archive()) {
                     echo 'Conteúdos para famílias, acolhidos e recomeços.';
+                } elseif (is_category()) {
+                    single_cat_title();
                 } else {
                     echo wp_kses_post(get_the_archive_title());
                 }
                 ?>
             </h1>
-            <?php if (get_the_archive_description()) : ?>
+            <?php if (!is_category() && get_the_archive_description()) : ?>
                 <p><?php echo wp_kses_post(get_the_archive_description()); ?></p>
             <?php else : ?>
                 <p>Orientações sobre acolhimento, tratamento, rotina terapêutica e apoio para famílias.</p>

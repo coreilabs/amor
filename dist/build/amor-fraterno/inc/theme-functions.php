@@ -25,6 +25,33 @@ function amor_html($key, $default = '') {
     return wp_kses_post(amor_get($key, $default));
 }
 
+function amor_map_embed_default() {
+    return '<iframe src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d20390.41916573777!2d-49.232787948693435!3d-16.831880970264336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x935d9d70bf81da55%3A0xf7659954fd0bd173!2sCentro%20Terap%C3%AAutico%20Amor%20Fraterno%2C%20R.%20Ang%C3%A9lica%2C%20Qd.30%20-%20Lt.10%20-%20Jardim%20Rosa%20do%20Sul%2C%20Aparecida%20de%20Goi%C3%A2nia%20-%20GO%2C%2074975-255!3m2!1d-16.8415246!2d-49.2559513!5e0!3m2!1spt-BR!2sbr!4v1782659591533!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+}
+
+function amor_sanitize_map_embed($value) {
+    return wp_kses($value, amor_map_embed_allowed_html());
+}
+
+function amor_map_embed_allowed_html() {
+    return array(
+        'iframe' => array(
+            'src' => true,
+            'width' => true,
+            'height' => true,
+            'style' => true,
+            'allowfullscreen' => true,
+            'loading' => true,
+            'referrerpolicy' => true,
+            'title' => true,
+        ),
+    );
+}
+
+function amor_map_embed() {
+    return wp_kses(amor_get('location_embed', amor_map_embed_default()), amor_map_embed_allowed_html());
+}
+
 function amor_phone_digits() {
     return preg_replace('/\D+/', '', amor_get('whatsapp_number', '5562992096062'));
 }
@@ -171,6 +198,8 @@ function amor_add_control($wp_customize, $section, $id, $label, $default = '', $
 
     if ('textarea' === $type) {
         $sanitize = 'wp_kses_post';
+    } elseif ('embed' === $type) {
+        $sanitize = 'amor_sanitize_map_embed';
     } elseif ('url' === $type || 'image' === $type) {
         $sanitize = 'esc_url_raw';
     }
@@ -193,7 +222,7 @@ function amor_add_control($wp_customize, $section, $id, $label, $default = '', $
     $wp_customize->add_control($setting, array(
         'label' => $label,
         'section' => $section,
-        'type' => $type,
+        'type' => 'embed' === $type ? 'textarea' : $type,
     ));
 }
 
@@ -230,6 +259,7 @@ function amor_register_customizer($wp_customize) {
     amor_add_control($wp_customize, 'amor_global', 'whatsapp_message', 'Mensagem padrão do WhatsApp', 'Vim pelo site do Centro Terapêutico Amor Fraterno e quero mais informações.', 'textarea');
     amor_add_control($wp_customize, 'amor_global', 'ga_id', 'Google Analytics / Ads ID', 'G-HK88EVQ1NM');
     amor_add_control($wp_customize, 'amor_global', 'footer_tagline', 'Frase do rodapé', 'Acolhimento que transforma. Amor que restaura. Esperança que renasce.', 'textarea');
+    amor_add_control($wp_customize, 'amor_global', 'location_embed', 'Código embed da localização', amor_map_embed_default(), 'embed');
 
     amor_add_control($wp_customize, 'amor_home_hero', 'hero_eyebrow', 'Chamada curta', 'Acolhimento com amor, tratamento com propósito');
     amor_add_control($wp_customize, 'amor_home_hero', 'hero_title', 'Título', 'Centro Terapêutico Amor Fraterno');
@@ -431,6 +461,8 @@ function amor_breadcrumbs() {
         echo '<span>/</span><span>' . esc_html(get_the_title()) . '</span>';
     } elseif (is_page()) {
         echo '<span>/</span><span>' . esc_html(get_the_title()) . '</span>';
+    } elseif (is_category()) {
+        echo '<span>/</span><span>' . esc_html(single_cat_title('', false)) . '</span>';
     } elseif (is_archive()) {
         echo '<span>/</span><span>' . esc_html(get_the_archive_title()) . '</span>';
     } elseif (is_search()) {
