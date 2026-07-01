@@ -2655,9 +2655,9 @@ body.cookie-modal-open {
 }
 
 .family-message-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  display: block;
+  column-count: 2;
+  column-gap: 18px;
 }
 
 .family-message-column {
@@ -2676,7 +2676,12 @@ body.cookie-modal-open {
 }
 
 .family-note {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 18px;
   overflow: hidden;
+  break-inside: avoid;
+  vertical-align: top;
 }
 
 .family-note-photo {
@@ -2684,8 +2689,8 @@ body.cookie-modal-open {
   display: grid;
   place-items: center;
   width: 100%;
-  height: clamp(138px, 17vw, 184px);
-  padding: 0;
+  min-height: 96px;
+  padding: 12px;
   border: 0;
   background: linear-gradient(135deg, rgba(216, 255, 244, 0.72), rgba(233, 250, 250, 0.98));
   cursor: zoom-in;
@@ -2696,7 +2701,7 @@ body.cookie-modal-open {
   width: auto;
   max-width: 100%;
   height: auto;
-  max-height: 100%;
+  max-height: 220px;
   object-fit: contain;
 }
 
@@ -2956,9 +2961,12 @@ body.cookie-modal-open {
   }
 
   .family-password-row,
-  .family-message-grid,
   .family-schedule-item {
     grid-template-columns: 1fr;
+  }
+
+  .family-message-grid {
+    column-count: 1;
   }
 
   .family-password-row .btn {
@@ -2977,7 +2985,11 @@ body.cookie-modal-open {
   }
 
   .family-note-photo {
-    height: 154px;
+    min-height: 90px;
+  }
+
+  .family-note-photo img {
+    max-height: 190px;
   }
 }
 

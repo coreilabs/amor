@@ -66,6 +66,16 @@
     <i data-lucide="message-circle" aria-hidden="true"></i>
 </a>
 
+<div class="lightbox" data-lightbox hidden role="dialog" aria-modal="true" aria-label="Galeria de imagens">
+    <button class="lightbox-close" type="button" data-lightbox-close aria-label="Fechar galeria"><i data-lucide="x" aria-hidden="true"></i></button>
+    <button class="lightbox-nav lightbox-prev" type="button" data-lightbox-prev aria-label="Imagem anterior"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+    <figure class="lightbox-stage" data-lightbox-stage>
+        <img src="<?php echo amor_asset('assets/images/entrada.webp'); ?>" alt="" data-lightbox-image>
+        <figcaption><span data-lightbox-title></span><strong data-lightbox-counter></strong></figcaption>
+    </figure>
+    <button class="lightbox-nav lightbox-next" type="button" data-lightbox-next aria-label="Próxima imagem"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+</div>
+
 <?php amor_cookie_banner(); ?>
 <?php wp_footer(); ?>
 </body>
