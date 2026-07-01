@@ -10,6 +10,7 @@ if (!defined('ABSPATH')) {
 }
 
 require get_template_directory() . '/inc/theme-functions.php';
+require get_template_directory() . '/inc/family-area.php';
 
 function amor_setup() {
     load_theme_textdomain('amor-fraterno', get_template_directory() . '/languages');
@@ -43,6 +44,7 @@ function amor_default_primary_menu_items() {
         array('title' => 'Tratamento', 'url' => home_url('/#tratamento')),
         array('title' => 'Ambientes', 'url' => home_url('/#galeria')),
         array('title' => 'Publicações', 'url' => amor_posts_url()),
+        array('title' => 'Área da Família', 'url' => amor_family_area_url()),
         array('title' => 'Contato', 'url' => home_url('/#contato')),
     );
 }
@@ -162,6 +164,13 @@ function amor_is_primary_menu_item_current($item) {
             || is_archive()
             || is_search()
             || (bool) preg_match('#^/(novidades|publicacoes|category|tag|author)(/|$)#', $request_path);
+    }
+
+    if ('Área da Família' === $title) {
+        return amor_is_family_area_page()
+            || is_singular('amor_family_message')
+            || is_singular('amor_family_schedule')
+            || (bool) preg_match('#^/(area-da-familia)(/|$)#', $request_path);
     }
 
     return false;
