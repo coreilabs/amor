@@ -2660,6 +2660,11 @@ body.cookie-modal-open {
   gap: 18px;
 }
 
+.family-message-column {
+  display: grid;
+  gap: 22px;
+}
+
 .family-note,
 .family-form-panel,
 .family-empty,
@@ -2675,18 +2680,45 @@ body.cookie-modal-open {
 }
 
 .family-note-photo {
-  display: block;
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 100%;
+  height: clamp(138px, 17vw, 184px);
   padding: 0;
   border: 0;
-  background: transparent;
+  background: linear-gradient(135deg, rgba(216, 255, 244, 0.72), rgba(233, 250, 250, 0.98));
   cursor: zoom-in;
+  overflow: hidden;
 }
 
 .family-note-photo img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.family-note-photo span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--teal-deep);
+  font-size: 0.74rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(0, 93, 117, 0.13);
+}
+
+.family-note-photo span svg {
+  width: 14px;
+  height: 14px;
 }
 
 .family-note-body {
@@ -2846,6 +2878,48 @@ body.cookie-modal-open {
   margin: 0 auto;
 }
 
+.family-message-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.family-message-pagination ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.family-message-pagination li {
+  margin: 0;
+  padding: 0;
+}
+
+.family-message-pagination a,
+.family-message-pagination span {
+  display: inline-flex;
+  min-width: 42px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+  color: var(--teal-deep);
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(0, 93, 117, 0.08);
+}
+
+.family-message-pagination .current {
+  background: var(--teal);
+  color: #ffffff;
+  border-color: var(--teal);
+}
+
 @media (max-width: 980px) {
   .family-board-layout {
     grid-template-columns: 1fr;
@@ -2885,6 +2959,10 @@ body.cookie-modal-open {
   .family-schedule,
   .family-posts {
     padding: 64px 16px;
+  }
+
+  .family-note-photo {
+    height: 154px;
   }
 }
 

@@ -34,7 +34,7 @@ get_header();
             </div>
         </section>
 
-        <section class="family-board section-white" aria-labelledby="family-board-title">
+        <section class="family-board section-white" id="mural-recados" aria-labelledby="family-board-title">
             <div class="section-heading" data-aos="fade-up">
                 <span class="section-kicker">Mural de recados</span>
                 <h2 id="family-board-title">Mensagens que chegam com carinho.</h2>
@@ -42,35 +42,63 @@ get_header();
             </div>
 
             <div class="family-board-layout">
-                <div class="family-message-grid">
+                <div class="family-message-column">
                     <?php
+                    $messages_page = isset($_GET['recados_pagina']) ? max(1, absint(wp_unslash($_GET['recados_pagina']))) : 1;
+                    $family_page_url = get_permalink(get_queried_object_id());
                     $messages = new WP_Query(array(
                         'post_type' => 'amor_family_message',
                         'post_status' => 'publish',
-                        'posts_per_page' => 12,
+                        'posts_per_page' => 6,
+                        'paged' => $messages_page,
                         'ignore_sticky_posts' => true,
                     ));
 
                     if ($messages->have_posts()) :
-                        while ($messages->have_posts()) :
-                            $messages->the_post();
-                            $recipient = get_post_meta(get_the_ID(), '_amor_message_recipient', true);
-                            $relative = get_post_meta(get_the_ID(), '_amor_message_relative', true);
-                            ?>
-                            <article class="family-note" data-aos="fade-up">
-                                <?php if (has_post_thumbnail()) : ?>
-                                    <button class="family-note-photo" type="button" data-lightbox-src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>" data-lightbox-caption="<?php echo esc_attr($recipient ? 'Recado para ' . $recipient : get_the_title()); ?>" data-lightbox-group="recados">
-                                        <?php the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); ?>
-                                    </button>
-                                <?php endif; ?>
-                                <div class="family-note-body">
-                                    <span class="family-note-to">Para <?php echo esc_html($recipient ?: 'um acolhido especial'); ?></span>
-                                    <div class="family-note-text"><?php the_content(); ?></div>
-                                    <footer>Com carinho, <strong><?php echo esc_html($relative ?: 'familia'); ?></strong></footer>
-                                </div>
-                            </article>
+                        ?>
+                        <div class="family-message-grid">
                             <?php
-                        endwhile;
+                            while ($messages->have_posts()) :
+                                $messages->the_post();
+                                $recipient = get_post_meta(get_the_ID(), '_amor_message_recipient', true);
+                                $relative = get_post_meta(get_the_ID(), '_amor_message_relative', true);
+                                ?>
+                                <article class="family-note" data-aos="fade-up">
+                                    <?php if (has_post_thumbnail()) : ?>
+                                        <button class="family-note-photo" type="button" data-lightbox-src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>" data-lightbox-caption="<?php echo esc_attr($recipient ? 'Recado para ' . $recipient : get_the_title()); ?>" data-lightbox-group="recados">
+                                            <?php the_post_thumbnail('medium', array('loading' => 'lazy', 'decoding' => 'async')); ?>
+                                            <span><i data-lucide="maximize-2" aria-hidden="true"></i> Ampliar foto</span>
+                                        </button>
+                                    <?php endif; ?>
+                                    <div class="family-note-body">
+                                        <span class="family-note-to">Para <?php echo esc_html($recipient ?: 'um acolhido especial'); ?></span>
+                                        <div class="family-note-text"><?php the_content(); ?></div>
+                                        <footer>Com carinho, <strong><?php echo esc_html($relative ?: 'familia'); ?></strong></footer>
+                                    </div>
+                                </article>
+                                <?php
+                            endwhile;
+                            ?>
+                        </div>
+                        <?php
+                        $message_pages = paginate_links(array(
+                            'base' => add_query_arg('recados_pagina', '%#%', $family_page_url) . '#mural-recados',
+                            'format' => '',
+                            'current' => $messages_page,
+                            'total' => (int) $messages->max_num_pages,
+                            'prev_text' => 'Anteriores',
+                            'next_text' => 'Próximos',
+                            'type' => 'list',
+                        ));
+
+                        if ($message_pages) :
+                            ?>
+                            <nav class="family-message-pagination" aria-label="Paginação do mural de recados">
+                                <?php echo wp_kses_post($message_pages); ?>
+                            </nav>
+                            <?php
+                        endif;
+
                         wp_reset_postdata();
                     else :
                         ?>
