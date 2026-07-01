@@ -320,6 +320,22 @@ function amor_family_handle_message_submit() {
         return array('type' => 'error', 'message' => 'Preencha para quem, seu nome e a mensagem.');
     }
 
+    $photo_size = !empty($_FILES['amor_photo']['size']) ? (int) $_FILES['amor_photo']['size'] : 0;
+    $submission_fingerprint = hash('sha256', implode('|', array(
+        strtolower($recipient),
+        strtolower($relative),
+        wp_strip_all_tags($message),
+        $photo_size,
+        isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'])) : '',
+    )));
+    $submission_key = 'amor_family_message_' . $submission_fingerprint;
+
+    if (get_transient($submission_key)) {
+        return array('type' => 'success', 'message' => 'Recado recebido. Ele ja esta aguardando aprovacao da equipe.');
+    }
+
+    set_transient($submission_key, 1, 10 * MINUTE_IN_SECONDS);
+
     $post_id = wp_insert_post(array(
         'post_type' => 'amor_family_message',
         'post_title' => sprintf('Recado para %s', $recipient),
@@ -328,6 +344,7 @@ function amor_family_handle_message_submit() {
     ));
 
     if (is_wp_error($post_id) || !$post_id) {
+        delete_transient($submission_key);
         return array('type' => 'error', 'message' => 'Nao foi possivel salvar o recado agora. Tente novamente em instantes.');
     }
 

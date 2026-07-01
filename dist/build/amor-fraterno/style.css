@@ -2774,6 +2774,21 @@ body.cookie-modal-open {
   justify-content: center;
 }
 
+.family-message-form button[disabled] {
+  cursor: wait;
+  opacity: 0.78;
+}
+
+.family-message-form button[aria-busy="true"] svg {
+  animation: family-submit-spin 900ms linear infinite;
+}
+
+@keyframes family-submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .family-alert {
   margin: 14px 0;
   padding: 12px 14px;

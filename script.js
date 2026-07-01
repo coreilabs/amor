@@ -434,6 +434,120 @@ const setupCookieConsent = () => {
 
 setupCookieConsent();
 
+const setupFamilyMessageForm = () => {
+  const form = document.querySelector("[data-family-message-form]");
+  if (!form) return;
+
+  const fileInput = form.querySelector('input[type="file"][name="amor_photo"]');
+  const submitButton = form.querySelector("[data-family-submit]");
+  const maxDimension = 1600;
+  const jpegQuality = 0.82;
+  let isSubmitting = false;
+
+  const setSubmitState = (message) => {
+    if (!submitButton) return;
+    submitButton.disabled = true;
+    submitButton.setAttribute("aria-busy", "true");
+    submitButton.innerHTML = `<i data-lucide="loader-circle" aria-hidden="true"></i> ${message}`;
+    window.lucide?.createIcons();
+  };
+
+  const readImage = (file) => new Promise((resolve, reject) => {
+    const image = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(image);
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error("Nao foi possivel carregar a foto."));
+    };
+
+    image.src = objectUrl;
+  });
+
+  const canvasToBlob = (canvas, type, quality) => new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+        return;
+      }
+
+      reject(new Error("Nao foi possivel reduzir a foto."));
+    }, type, quality);
+  });
+
+  const resizeImageFile = async (file) => {
+    if (!file || !file.type.startsWith("image/") || file.type === "image/gif") {
+      return file;
+    }
+
+    const image = await readImage(file);
+    const largestSide = Math.max(image.naturalWidth, image.naturalHeight);
+
+    if (largestSide <= maxDimension && file.size <= 900 * 1024) {
+      return file;
+    }
+
+    const scale = Math.min(1, maxDimension / largestSide);
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d", { alpha: false });
+
+    canvas.width = width;
+    canvas.height = height;
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, width, height);
+    context.drawImage(image, 0, 0, width, height);
+
+    const blob = await canvasToBlob(canvas, "image/jpeg", jpegQuality);
+    const originalName = file.name.replace(/\.[^.]+$/, "");
+    return new File([blob], `${originalName || "recado"}-otimizada.jpg`, {
+      type: "image/jpeg",
+      lastModified: Date.now()
+    });
+  };
+
+  const replaceSelectedFile = (file) => {
+    if (!fileInput || !file || typeof DataTransfer === "undefined") return;
+
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    fileInput.files = transfer.files;
+  };
+
+  form.addEventListener("submit", async (event) => {
+    if (isSubmitting) {
+      event.preventDefault();
+      return;
+    }
+
+    isSubmitting = true;
+    event.preventDefault();
+    setSubmitState("Preparando foto...");
+
+    try {
+      const selectedFile = fileInput?.files?.[0];
+      if (selectedFile) {
+        const resizedFile = await resizeImageFile(selectedFile);
+        replaceSelectedFile(resizedFile);
+      }
+
+      setSubmitState("Enviando recado...");
+      form.submit();
+    } catch (error) {
+      setSubmitState("Enviando recado...");
+      form.submit();
+    }
+  });
+};
+
+setupFamilyMessageForm();
+
 window.addEventListener("load", () => {
   window.lucide?.createIcons();
 

@@ -119,7 +119,7 @@ get_header();
                         <div class="family-alert family-alert-<?php echo esc_attr($family_message_status['type']); ?>"><?php echo esc_html($family_message_status['message']); ?></div>
                     <?php endif; ?>
 
-                    <form class="family-message-form" method="post" enctype="multipart/form-data">
+                    <form class="family-message-form" method="post" enctype="multipart/form-data" data-family-message-form>
                         <?php wp_nonce_field('amor_family_message', 'amor_family_message_nonce'); ?>
                         <input type="hidden" name="amor_family_message_action" value="1">
 
@@ -135,7 +135,7 @@ get_header();
                         <label for="amor_photo">Foto</label>
                         <input id="amor_photo" name="amor_photo" type="file" accept="image/*" capture="environment">
 
-                        <button class="btn btn-primary" type="submit"><i data-lucide="send" aria-hidden="true"></i> Enviar para aprovação</button>
+                        <button class="btn btn-primary" type="submit" data-family-submit><i data-lucide="send" aria-hidden="true"></i> Enviar para aprovação</button>
                     </form>
                 </aside>
             </div>
