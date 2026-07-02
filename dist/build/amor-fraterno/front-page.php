@@ -205,7 +205,7 @@ get_header();
                             <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } else { echo '<img src="' . amor_asset('assets/images/equipe-atendimento.webp') . '" alt="" loading="lazy" decoding="async">'; } ?>
                         </a>
                         <div class="post-card-body">
-                            <span><?php echo esc_html(get_the_category()[0]->name ?? 'Publicação'); ?></span>
+                            <span><?php echo esc_html(amor_post_primary_category_name(get_the_ID(), 'Publicação')); ?></span>
                             <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                             <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 18)); ?></p>
                         </div>
@@ -240,7 +240,6 @@ get_header();
                 <div class="contact-grid" aria-label="Canais e informações de contato">
                     <a class="contact-card contact-card-whatsapp" href="<?php echo amor_whatsapp_url(); ?>" target="_blank" rel="noopener"><i data-lucide="message-circle" aria-hidden="true"></i><span>WhatsApp</span><strong><?php echo amor_text('phone_display', '(62) 99209-6062'); ?></strong><em>Conversar no WhatsApp</em></a>
                     <a class="contact-card contact-card-email" href="mailto:<?php echo esc_attr(amor_get('email', 'centroterapeuticoamorfraterno@gmail.com')); ?>"><i data-lucide="mail" aria-hidden="true"></i><span>E-mail institucional</span><strong><?php echo amor_text('email', 'centroterapeuticoamorfraterno@gmail.com'); ?></strong><em>Enviar e-mail</em></a>
-                    <div class="contact-card contact-card-info"><i data-lucide="map-pin" aria-hidden="true"></i><span>Localização</span><strong><?php echo amor_text('location', 'Aparecida de Goiânia - Goiás'); ?></strong><em>Informações na triagem</em></div>
                     <div class="contact-card contact-card-info"><i data-lucide="heart-handshake" aria-hidden="true"></i><span>Acolhimento</span><strong>Orientação para famílias e responsáveis</strong><em>Escuta humanizada</em></div>
                 </div>
             </div>

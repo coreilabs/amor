@@ -63,7 +63,7 @@ get_header();
                                 $recipient = get_post_meta(get_the_ID(), '_amor_message_recipient', true);
                                 $relative = get_post_meta(get_the_ID(), '_amor_message_relative', true);
                                 ?>
-                                <article class="family-note" data-aos="fade-up">
+                                <article class="family-note <?php echo has_post_thumbnail() ? 'has-photo' : 'no-photo'; ?>" data-aos="fade-up">
                                     <?php if (has_post_thumbnail()) : ?>
                                         <button class="family-note-photo" type="button" data-lightbox-src="<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>" data-lightbox-caption="<?php echo esc_attr($recipient ? 'Recado para ' . $recipient : get_the_title()); ?>" data-lightbox-group="recados">
                                             <?php the_post_thumbnail('medium', array('loading' => 'lazy', 'decoding' => 'async')); ?>
@@ -188,46 +188,22 @@ get_header();
             </div>
         </section>
 
-        <section class="family-posts section-white" aria-labelledby="family-posts-title">
+        <section class="family-posts section-white" id="publicacoes-exclusivas" aria-labelledby="family-posts-title">
             <div class="section-heading" data-aos="fade-up">
                 <span class="section-kicker">Publicações exclusivas</span>
-                <h2 id="family-posts-title">Conteudos para acompanhar a jornada.</h2>
+                <h2 id="family-posts-title">Conteúdos para acompanhar a jornada.</h2>
             </div>
-            <div class="post-card-grid">
-                <?php
-                $family_posts = new WP_Query(array(
-                    'post_type' => 'post',
-                    'post_status' => 'publish',
-                    'posts_per_page' => 3,
-                    'category_name' => amor_family_category_slug(),
-                    'ignore_sticky_posts' => true,
-                ));
-
-                if ($family_posts->have_posts()) :
-                    while ($family_posts->have_posts()) :
-                        $family_posts->the_post();
-                        ?>
-                        <article class="post-card" data-aos="fade-up">
-                            <a class="post-card-image" href="<?php the_permalink(); ?>">
-                                <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } else { echo '<img src="' . esc_url(amor_asset('assets/images/equipe-atendimento.webp')) . '" alt="" loading="lazy" decoding="async">'; } ?>
-                            </a>
-                            <div class="post-card-body">
-                                <span>Área da Família</span>
-                                <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-                                <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 16)); ?></p>
-                            </div>
-                        </article>
-                        <?php
-                    endwhile;
-                    wp_reset_postdata();
-                else :
-                    ?>
-                    <article class="family-empty family-empty-wide">
-                        <i data-lucide="newspaper" aria-hidden="true"></i>
-                        <h3>Nenhuma publicação exclusiva por enquanto.</h3>
-                        <p>Publique posts na categoria configurada como Area da Familia para eles aparecerem aqui.</p>
-                    </article>
-                <?php endif; ?>
+            <?php
+            $family_posts_page = isset($_GET['publicacoes_pagina']) ? max(1, absint(wp_unslash($_GET['publicacoes_pagina']))) : 1;
+            $family_posts = amor_family_posts_query($family_posts_page);
+            ?>
+            <div class="family-posts-block" data-family-posts-block aria-live="polite" aria-busy="false">
+                <div class="post-card-grid" data-family-posts-grid>
+                    <?php echo amor_family_posts_cards($family_posts); ?>
+                </div>
+                <div data-family-posts-pagination>
+                    <?php echo amor_family_posts_pagination($family_posts, $family_posts_page); ?>
+                </div>
             </div>
         </section>
     <?php endif; ?>

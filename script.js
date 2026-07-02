@@ -155,6 +155,55 @@ const setupSinglePostSidebar = () => {
 
 setupSinglePostSidebar();
 
+const setupSingleShareActions = () => {
+  document.querySelectorAll("[data-native-share]").forEach((button) => {
+    if (!navigator.share) {
+      button.hidden = true;
+      return;
+    }
+
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.share({
+          title: button.dataset.shareTitle || document.title,
+          url: button.dataset.shareUrl || window.location.href
+        });
+      } catch (error) {
+        // User cancellation is expected in native share sheets.
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-copy-share-url]").forEach((button) => {
+    const copyBlock = button.closest(".single-share-copy");
+    const field = copyBlock?.querySelector("[data-share-url-field]");
+    const alert = copyBlock?.querySelector("[data-copy-share-alert]");
+
+    button.addEventListener("click", async () => {
+      const url = field?.value || button.dataset.copyShareUrl || window.location.href;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        field?.select();
+        field?.setSelectionRange?.(0, field.value.length);
+        if (alert) alert.hidden = false;
+        setTimeout(() => {
+          if (alert) alert.hidden = true;
+        }, 1800);
+      } catch (error) {
+        field?.select();
+        field?.setSelectionRange?.(0, field.value.length);
+        if (alert) alert.hidden = false;
+        setTimeout(() => {
+          if (alert) alert.hidden = true;
+        }, 1800);
+      }
+    });
+  });
+};
+
+setupSingleShareActions();
+
 const setupLightbox = () => {
   const sourceItems = [
     ...document.querySelectorAll(".gallery-item:not(.swiper-slide-duplicate), [data-lightbox-src]")
@@ -547,6 +596,58 @@ const setupFamilyMessageForm = () => {
 };
 
 setupFamilyMessageForm();
+
+const setupFamilyPostsPagination = () => {
+  const block = document.querySelector("[data-family-posts-block]");
+  if (!block || !window.amorFamilyPosts?.ajaxUrl) return;
+
+  const grid = block.querySelector("[data-family-posts-grid]");
+  const pagination = block.querySelector("[data-family-posts-pagination]");
+  if (!grid || !pagination) return;
+
+  const loadPage = async (page) => {
+    block.classList.add("is-loading");
+    block.setAttribute("aria-busy", "true");
+
+    const formData = new FormData();
+    formData.append("action", "amor_family_posts");
+    formData.append("nonce", window.amorFamilyPosts.nonce);
+    formData.append("page", String(page));
+
+    try {
+      const response = await fetch(window.amorFamilyPosts.ajaxUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        body: formData
+      });
+      const payload = await response.json();
+
+      if (!payload?.success) {
+        throw new Error(payload?.data?.message || "Não foi possível carregar as publicações.");
+      }
+
+      grid.innerHTML = payload.data.cards || "";
+      pagination.innerHTML = payload.data.pagination || "";
+      window.lucide?.createIcons();
+      window.AOS?.refreshHard?.();
+    } catch (error) {
+      window.location.href = `${window.location.pathname}?publicacoes_pagina=${encodeURIComponent(page)}#publicacoes-exclusivas`;
+    } finally {
+      block.classList.remove("is-loading");
+      block.setAttribute("aria-busy", "false");
+    }
+  };
+
+  pagination.addEventListener("click", (event) => {
+    const link = event.target.closest("[data-family-posts-page]");
+    if (!link) return;
+
+    event.preventDefault();
+    loadPage(link.dataset.familyPostsPage || "1");
+  });
+};
+
+setupFamilyPostsPagination();
 
 window.addEventListener("load", () => {
   window.lucide?.createIcons();

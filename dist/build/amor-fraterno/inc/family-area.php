@@ -94,8 +94,17 @@ function amor_family_category_id() {
     return $term ? (int) $term->term_id : 0;
 }
 
+function amor_is_family_post($post_id = 0) {
+    $post_id = $post_id ? (int) $post_id : get_the_ID();
+    return $post_id && has_category(amor_family_category_slug(), $post_id);
+}
+
 function amor_family_exclude_private_posts($query) {
     if (is_admin()) {
+        return;
+    }
+
+    if ($query->get('amor_include_family_posts')) {
         return;
     }
 
@@ -113,12 +122,14 @@ function amor_family_exclude_private_posts($query) {
     }
 
     if ($category_name === amor_family_category_slug() || $query->is_category(amor_family_category_slug())) {
+        $query->set('post__in', array(0));
         return;
     }
 
     $category__in = (array) $query->get('category__in');
     if (in_array($category_id, array_map('intval', $category__in), true)) {
-        return;
+        $category__in = array_values(array_diff(array_map('intval', $category__in), array($category_id)));
+        $query->set('category__in', $category__in ?: array(0));
     }
 
     $excluded = array_map('intval', (array) $query->get('category__not_in'));
@@ -127,12 +138,54 @@ function amor_family_exclude_private_posts($query) {
 }
 add_action('pre_get_posts', 'amor_family_exclude_private_posts', 20);
 
+function amor_family_block_category_archive() {
+    if (!is_category(amor_family_category_slug())) {
+        return;
+    }
+
+    global $wp_query;
+    $wp_query->set_404();
+    status_header(404);
+    nocache_headers();
+}
+add_action('template_redirect', 'amor_family_block_category_archive', 1);
+
 function amor_family_maybe_gate_content() {
-    if ((amor_is_family_area_page() || amor_is_family_category_context()) && !amor_family_has_access()) {
+    if ((amor_is_family_area_page() || (amor_is_family_category_context() && !is_category())) && !amor_family_has_access()) {
         status_header(200);
     }
 }
 add_action('template_redirect', 'amor_family_maybe_gate_content');
+
+function amor_family_filter_category_list_args($args) {
+    $category_id = amor_family_category_id();
+
+    if (!$category_id) {
+        return $args;
+    }
+
+    $raw_excluded = isset($args['exclude']) ? $args['exclude'] : array();
+    $excluded = is_array($raw_excluded)
+        ? array_map('intval', $raw_excluded)
+        : array_filter(array_map('intval', explode(',', (string) $raw_excluded)));
+    $excluded[] = $category_id;
+    $args['exclude'] = implode(',', array_values(array_unique($excluded)));
+
+    return $args;
+}
+add_filter('wp_list_categories_args', 'amor_family_filter_category_list_args');
+add_filter('widget_categories_args', 'amor_family_filter_category_list_args');
+
+function amor_family_filter_category_list_output($output) {
+    $category_id = amor_family_category_id();
+
+    if (!$category_id) {
+        return $output;
+    }
+
+    return preg_replace('/<li class="cat-item cat-item-' . preg_quote((string) $category_id, '/') . '(?:\s[^"]*)?".*?<\/li>\s*/s', '', $output);
+}
+add_filter('wp_list_categories', 'amor_family_filter_category_list_output');
 
 function amor_register_family_content_types() {
     register_post_type('amor_family_message', array(
@@ -215,6 +268,107 @@ function amor_family_customize($wp_customize) {
     amor_add_control($wp_customize, 'amor_family_area', 'family_notice', 'Aviso do formulário', 'Os recados passam por aprovação manual antes de aparecerem no mural.', 'textarea');
 }
 add_action('customize_register', 'amor_family_customize', 20);
+
+function amor_family_posts_query($page = 1) {
+    return new WP_Query(array(
+        'post_type' => 'post',
+        'post_status' => 'publish',
+        'posts_per_page' => 3,
+        'paged' => max(1, (int) $page),
+        'category_name' => amor_family_category_slug(),
+        'ignore_sticky_posts' => true,
+        'amor_include_family_posts' => true,
+    ));
+}
+
+function amor_family_posts_cards($family_posts) {
+    ob_start();
+
+    if ($family_posts->have_posts()) :
+        while ($family_posts->have_posts()) :
+            $family_posts->the_post();
+            ?>
+            <article class="post-card" data-aos="fade-up">
+                <a class="post-card-image" href="<?php the_permalink(); ?>">
+                    <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } else { echo '<img src="' . esc_url(amor_asset('assets/images/equipe-atendimento.webp')) . '" alt="" loading="lazy" decoding="async">'; } ?>
+                </a>
+                <div class="post-card-body">
+                    <span>Publicação exclusiva</span>
+                    <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                    <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 16)); ?></p>
+                </div>
+            </article>
+            <?php
+        endwhile;
+        wp_reset_postdata();
+    else :
+        ?>
+        <article class="family-empty family-empty-wide">
+            <i data-lucide="newspaper" aria-hidden="true"></i>
+            <h3>Nenhuma publicação exclusiva por enquanto.</h3>
+            <p>Publique posts na categoria configurada como Área da Família para eles aparecerem aqui.</p>
+        </article>
+        <?php
+    endif;
+
+    return ob_get_clean();
+}
+
+function amor_family_posts_pagination($family_posts, $current_page = 1) {
+    $links = paginate_links(array(
+        'base' => add_query_arg('publicacoes_pagina', '%#%', amor_family_area_url()) . '#publicacoes-exclusivas',
+        'format' => '',
+        'current' => max(1, (int) $current_page),
+        'total' => (int) $family_posts->max_num_pages,
+        'prev_text' => 'Anteriores',
+        'next_text' => 'Próximas',
+        'type' => 'array',
+    ));
+
+    if (!$links) {
+        return '';
+    }
+
+    $html = '<nav class="family-message-pagination family-posts-pagination" aria-label="Paginação das publicações exclusivas"><ul>';
+
+    foreach ($links as $link) {
+        $link = preg_replace_callback('/href=[\'"]([^\'"]+)[\'"]/', function ($matches) {
+            $page = 1;
+            $url = html_entity_decode($matches[1]);
+            $query = wp_parse_url($url, PHP_URL_QUERY);
+
+            if ($query) {
+                parse_str($query, $params);
+                $page = !empty($params['publicacoes_pagina']) ? max(1, absint($params['publicacoes_pagina'])) : 1;
+            }
+
+            return 'href="' . esc_url($matches[1]) . '" data-family-posts-page="' . esc_attr($page) . '"';
+        }, $link);
+
+        $html .= '<li>' . $link . '</li>';
+    }
+
+    $html .= '</ul></nav>';
+    return $html;
+}
+
+function amor_family_posts_ajax() {
+    check_ajax_referer('amor_family_posts', 'nonce');
+
+    if (!amor_family_has_access()) {
+        wp_send_json_error(array('message' => 'Acesso expirado. Digite a senha novamente.'), 403);
+    }
+
+    $page = isset($_POST['page']) ? max(1, absint(wp_unslash($_POST['page']))) : 1;
+    $family_posts = amor_family_posts_query($page);
+
+    wp_send_json_success(array(
+        'cards' => amor_family_posts_cards($family_posts),
+        'pagination' => amor_family_posts_pagination($family_posts, $page),
+    ));
+}
+add_action('wp_ajax_amor_family_posts', 'amor_family_posts_ajax');
+add_action('wp_ajax_nopriv_amor_family_posts', 'amor_family_posts_ajax');
 
 function amor_family_schedule_meta_box() {
     add_meta_box('amor_family_schedule_details', 'Detalhes do cronograma', 'amor_family_schedule_meta_box_html', 'amor_family_schedule', 'normal', 'high');
@@ -391,7 +545,7 @@ function amor_family_password_form($error = '') {
 }
 
 function amor_family_gate_single_content($template) {
-    if (!amor_is_family_category_context() || amor_family_has_access()) {
+    if (is_category() || !amor_is_family_category_context() || amor_family_has_access()) {
         return $template;
     }
 

@@ -236,6 +236,10 @@ function amor_scripts() {
     wp_enqueue_script('swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), '11', true);
     wp_enqueue_script('lucide', 'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js', array(), null, true);
     wp_enqueue_script('amor-script', get_template_directory_uri() . '/script.js', array('aos', 'swiper', 'lucide'), $script_version, true);
+    wp_localize_script('amor-script', 'amorFamilyPosts', array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('amor_family_posts'),
+    ));
 }
 add_action('wp_enqueue_scripts', 'amor_scripts');
 
@@ -291,6 +295,7 @@ function amor_head_meta() {
     $og = amor_get_og_data();
     ?>
     <meta name="theme-color" content="#005d75">
+    <meta name="description" content="<?php echo esc_attr($og['description']); ?>">
     <meta property="og:locale" content="pt_BR">
     <meta property="og:site_name" content="<?php bloginfo('name'); ?>">
     <meta property="og:type" content="<?php echo esc_attr($og['type']); ?>">
@@ -299,6 +304,7 @@ function amor_head_meta() {
     <meta property="og:url" content="<?php echo esc_url($og['url']); ?>">
     <meta property="og:image" content="<?php echo esc_url($og['image']); ?>">
     <meta property="og:image:secure_url" content="<?php echo esc_url($og['image']); ?>">
+    <meta property="og:image:type" content="<?php echo esc_attr($og['image_type']); ?>">
     <meta property="og:image:width" content="<?php echo esc_attr($og['image_width']); ?>">
     <meta property="og:image:height" content="<?php echo esc_attr($og['image_height']); ?>">
     <meta property="og:image:alt" content="<?php echo esc_attr($og['image_alt']); ?>">
@@ -313,6 +319,7 @@ function amor_head_meta() {
     <meta name="twitter:title" content="<?php echo esc_attr($og['title']); ?>">
     <meta name="twitter:description" content="<?php echo esc_attr($og['description']); ?>">
     <meta name="twitter:image" content="<?php echo esc_url($og['image']); ?>">
+    <meta name="twitter:image:alt" content="<?php echo esc_attr($og['image_alt']); ?>">
     <link rel="shortcut icon" href="<?php echo amor_asset('assets/images/favicon.ico'); ?>">
     <link rel="icon" type="image/png" sizes="512x512" href="<?php echo amor_asset('assets/images/favicon.png'); ?>">
     <link rel="apple-touch-icon" href="<?php echo amor_asset('assets/images/favicon.png'); ?>">

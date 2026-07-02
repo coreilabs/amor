@@ -18,7 +18,7 @@ get_header();
                         <i data-lucide="arrow-left" aria-hidden="true"></i>
                         Todas as publicações
                     </a>
-                    <span class="section-kicker"><?php echo esc_html(get_the_category()[0]->name ?? 'Publicação'); ?></span>
+                    <span class="section-kicker"><?php echo esc_html(amor_post_primary_category_name(get_the_ID(), 'Publicação')); ?></span>
                     <h1><?php the_title(); ?></h1>
                     <?php if (has_excerpt()) : ?><p><?php echo esc_html(get_the_excerpt()); ?></p><?php endif; ?>
                     <div class="single-post-meta" aria-label="Informações da publicação">
@@ -34,6 +34,10 @@ get_header();
                         <figure class="single-post-cover" data-aos="fade-up">
                             <?php the_post_thumbnail('large', array('loading' => 'eager', 'decoding' => 'async')); ?>
                         </figure>
+                    <?php endif; ?>
+
+                    <?php if (!(function_exists('amor_is_family_post') && amor_is_family_post())) : ?>
+                        <?php amor_single_share_buttons(); ?>
                     <?php endif; ?>
 
                     <?php if (is_active_sidebar('single-before')) : ?>
@@ -52,6 +56,8 @@ get_header();
                         ));
                         ?>
                     </div>
+
+                    <?php amor_single_about_box(); ?>
 
                     <?php do_action('amor_after_single_content'); ?>
                     <?php if (is_active_sidebar('single-after')) : ?>
@@ -74,7 +80,8 @@ get_header();
                     $related = new WP_Query(array(
                         'posts_per_page' => 3,
                         'post__not_in' => array(get_the_ID()),
-                        'category__in' => wp_get_post_categories(get_the_ID()),
+                        'category__in' => amor_public_post_category_ids(get_the_ID()),
+                        'category__not_in' => array(function_exists('amor_family_category_id') ? amor_family_category_id() : 0),
                         'ignore_sticky_posts' => true,
                     ));
 
@@ -86,7 +93,7 @@ get_header();
                                 <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } ?>
                             </a>
                             <div class="post-card-body">
-                                <span><?php echo esc_html(get_the_category()[0]->name ?? 'Publicação'); ?></span>
+                                <span><?php echo esc_html(amor_post_primary_category_name(get_the_ID(), 'Publicação')); ?></span>
                                 <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
                                 <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 16)); ?></p>
                             </div>

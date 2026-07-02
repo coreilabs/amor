@@ -56,7 +56,7 @@ get_header();
                                     <?php if (has_post_thumbnail()) { the_post_thumbnail('medium_large', array('loading' => 'lazy', 'decoding' => 'async')); } else { echo '<img src="' . amor_asset('assets/images/equipe-atendimento.webp') . '" alt="" loading="lazy" decoding="async">'; } ?>
                                 </a>
                                 <div class="archive-post-body">
-                                    <span><?php echo esc_html(get_the_category()[0]->name ?? 'Publicação'); ?></span>
+                                    <span><?php echo esc_html(amor_post_primary_category_name(get_the_ID(), 'Publicação')); ?></span>
                                     <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                                     <p><?php echo esc_html(wp_trim_words(get_the_excerpt(), 24)); ?></p>
                                     <a class="post-read-more" href="<?php the_permalink(); ?>">Ler publicação</a>
